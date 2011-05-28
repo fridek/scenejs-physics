@@ -1,5 +1,7 @@
 $(window).ready(function() {
 
+    var gravity = [0.0,-1.0,0.0];
+
     var M = {
         multiVec: function (v, f) {
             var tmp = [], i;
@@ -17,12 +19,24 @@ $(window).ready(function() {
                 tmp[i] = v1[i] + v2[i];
             }
             return tmp;
+        },
+
+        subVec: function (v1, v2) {
+            if(v1.length != v2.length) throw "Error in subVec: invalid vectors dimensions";
+
+            var tmp = [], i;
+            for(i=0;i<v1.length;i+=1) {
+                tmp[i] = v1[i] - v2[i];
+            }
+            return tmp;
         }
     };
 
-    var makeBox = function (position, scale, id) {
+    var makeBox = function (position, scale, boundingSphereRadius, id) {
         if(!position)   position = [0.0,0.0,0.0];
         if(!scale)      scale = [1.0,1.0,1.0];
+        if(!boundingSphereRadius) boundingSphereRadius = scale[0];
+
 
         return {
             transform: function (p, s) {
@@ -36,7 +50,7 @@ $(window).ready(function() {
 
             setMovement: function (s, a) {
                 if(s) this.speed = s;
-                if(a) this.acceleration = a;
+                if(a) this.acceleration = M.addVec(a, gravity);
             },
 
             calculateNextPosition: function (time) {
@@ -51,11 +65,13 @@ $(window).ready(function() {
             },
 
             prevPosition: [0.0,0.0,0.0],
-            position: [0.0,0.0,0.0],
+            position: position,
             nextPosition: [0.0,0.0,0.0],
 
             speed: [0.0,0.0,0.0],
-            acceleration: [0.0,0.0,0.0],
+            acceleration: gravity,
+
+            boundingSphereRadius: boundingSphereRadius,
 
             type: "translate",
             // Example translation
@@ -77,7 +93,7 @@ $(window).ready(function() {
 
                     nodes: [
                         {
-                            type : "box"
+                            type : "sphere"
                         }
                     ]
                 }
@@ -88,14 +104,16 @@ $(window).ready(function() {
 
     // global on purpose
     boxes = [
-        makeBox([0.0,0.0,0.0], [1.0,1.0,1.0], "box1")
+            makeBox([0.5,0.0,0.0], [0.5,0.5,0.5], null, "box1"),
+            makeBox([0.0,2.0,0.5], [0.5,0.5,0.5], null, "box2"),
+            makeBox([0.5,4.0,0.0], [0.5,0.5,0.5], null, "box3")
         ];
 
-    SceneJS.setDebugConfigs({
-        webgl: {
-            logTrace: true
-        }
-    });
+//    SceneJS.setDebugConfigs({
+//        webgl: {
+//            logTrace: true
+//        }
+//    });
 
     SceneJS.createNode({
 
@@ -193,8 +211,6 @@ $(window).ready(function() {
                                                 specular:       0.7,
                                                 shine:          10.0,
 
-
-
                                                 nodes: boxes
                                             }
                                         ]
@@ -255,25 +271,46 @@ $(window).ready(function() {
 
     SceneJS.withNode("theScene").start();
 
-    (function () {
-        boxes[0].setMovement([0.0,1.0,0.0]);
+    var detectCollision = function (box1, box2) {
+        var dist = M.subVec(box1.nextPosition, box2.nextPosition),
+            i, newSpeed, count = 0,
+            radiusSum = box1.boundingSphereRadius + box2.boundingSphereRadius;
+        for(i = 0;i<dist.length;i+=1) {
+            if(Math.abs(dist[i]) < radiusSum) {
+                count += 1;
+            }
+        }
+        if(count == dist.length) {
+            newSpeed = M.multiVec(M.addVec(box1.speed, box1.speed),0.5);
+            //console.log("collision of", box1.id, "and", box2.id, "new speed", newSpeed);
+            box1.setMovement(newSpeed);
+            box2.setMovement(M.multiVec(newSpeed,-1));
+        }
+    }
 
-        var frameTime = 1000/30,
-            time = Date.now(),
-            prevTime,
-            i,
-            renderLoop =  function () {
-                prevTime = time;
-                time = Date.now();
+//  boxes[0].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
+    boxes[1].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
+    boxes[2].setMovement([0.0,0.0,0.0], [0.0,-2.0,0.0]);
 
-                for(i=0;i < boxes.length; i+=1) {
-                    boxes[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
-                    boxes[i].updatePosition();
+
+    var frameTime = 1000/30,
+        time = Date.now(),
+        prevTime,
+        i, j,
+        renderLoop =  function () {
+            prevTime = time;
+            time = Date.now();
+
+            for(i=0;i < boxes.length; i+=1) {
+                boxes[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
+                for(j=i+1;j < boxes.length; j+=1) {
+                    detectCollision(boxes[i], boxes[j]);
                 }
+                boxes[i].updatePosition();
+            }
 
-            window.setTimeout(renderLoop, frameTime);
-        };
-        renderLoop();
-    }());
+        window.setTimeout(renderLoop, frameTime);
+    };
+    renderLoop();
 });
 
