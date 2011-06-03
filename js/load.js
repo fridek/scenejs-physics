@@ -1,12 +1,25 @@
 $(window).ready(function() {
 
-    var gravity = [0.0,-1.0,0.0];
+    var settings = {
+        gravity: [0.0,-1.0,0.0],
+        floorLevel: -10,
+        floorBounce: 0.5
+    };
 
     var M = {
         multiVec: function (v, f) {
             var tmp = [], i;
             for(i=0;i<v.length;i+=1) {
                 tmp[i] = v[i] * f;
+            }
+            return tmp;
+        },
+
+        multiVecVec: function (v1, v2) {
+            if(v1.length != v2.length) throw "Error in multiVecVec: invalid vectors dimensions";
+            var tmp = 0, i;
+            for(i=0;i<v1.length;i+=1) {
+                tmp += v1[i] * v2[i];
             }
             return tmp;
         },
@@ -29,10 +42,21 @@ $(window).ready(function() {
                 tmp[i] = v1[i] - v2[i];
             }
             return tmp;
+        },
+
+        vecLength: function(v) {
+            if(v[0].length != v[1].length) throw "Error in vecLength: invalid vectors dimensions";
+
+            var len = 0, i, t;
+            for(i = 0; i<v[0].length; i+= 1) {
+                t = v[0][i] - v[1][i];
+                len += t*t;
+            }
+            return Math.sqrt(len);
         }
     };
 
-    var makeBox = function (position, scale, boundingSphereRadius, id) {
+    var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         if(!position)   position = [0.0,0.0,0.0];
         if(!scale)      scale = [1.0,1.0,1.0];
         if(!boundingSphereRadius) boundingSphereRadius = scale[0];
@@ -50,12 +74,18 @@ $(window).ready(function() {
 
             setMovement: function (s, a) {
                 if(s) this.speed = s;
-                if(a) this.acceleration = M.addVec(a, gravity);
+                if(a) this.acceleration = M.addVec(a, settings.gravity);
             },
 
             calculateNextPosition: function (time) {
                 this.speed = M.addVec(this.speed,M.multiVec(this.acceleration,time));
                 this.nextPosition = M.addVec(this.position,M.multiVec(this.speed,time));
+
+                if(this.nextPosition[1] < (settings.floorLevel + this.boundingSphereRadius)) {
+                    this.acceleration[1] = settings.gravity[1];
+                    this.speed[1] *= -1 * settings.floorBounce;
+                    this.nextPosition[1] = settings.floorLevel + this.boundingSphereRadius;
+                }
             },
 
             updatePosition: function () {
@@ -69,7 +99,7 @@ $(window).ready(function() {
             nextPosition: [0.0,0.0,0.0],
 
             speed: [0.0,0.0,0.0],
-            acceleration: gravity,
+            acceleration: settings.gravity,
 
             boundingSphereRadius: boundingSphereRadius,
 
@@ -84,7 +114,6 @@ $(window).ready(function() {
             nodes : [
                 {
                     type: "scale",
-                    // Example scaling
                     x:  scale[0],
                     y:  scale[1],
                     z:  scale[2],
@@ -93,7 +122,7 @@ $(window).ready(function() {
 
                     nodes: [
                         {
-                            type : "sphere"
+                            type : type
                         }
                     ]
                 }
@@ -101,197 +130,51 @@ $(window).ready(function() {
         }
 
     };
-
+/*
     // global on purpose
-    boxes = [
-            makeBox([0.5,0.0,0.0], [0.5,0.5,0.5], null, "box1"),
-            makeBox([0.0,2.0,0.5], [0.5,0.5,0.5], null, "box2"),
-            makeBox([0.5,4.0,0.0], [0.5,0.5,0.5], null, "box3")
+    objects = [
+            makeObject('sphere', [0.5,0.0,0.0], [0.5,0.5,0.5], null, "box1"),
+            makeObject('sphere', [0.0,2.0,0.5], [0.5,0.5,0.5], null, "box2"),
+            makeObject('sphere', [0.5,4.0,0.0], [0.5,0.5,0.5], null, "box3"),
+            makeObject('sphere', [0.5,3.0,2.0], [0.5,0.5,0.5], null, "box4"),
+            makeObject('sphere', [0.0,3.0,1.0], [0.5,0.5,0.5], null, "box5")
         ];
 
-//    SceneJS.setDebugConfigs({
-//        webgl: {
-//            logTrace: true
-//        }
-//    });
-
-    SceneJS.createNode({
-
-        type: "scene",
-
-        /* ID that we'll access the scene by when we want to render it
-         */
-        id: "theScene",
-
-        /* Bind scene to a WebGL canvas:
-         */
-        canvasId: "theCanvas",
-
-        /* You can optionally write logging to a DIV - scene will log to the console as well.
-         */
-        loggingElementId: "theLoggingDiv",
-
-        nodes: [
-
-            /* Viewing transform specifies eye position, looking
-             * at the origin by default
-             */
-            {
-                type: "lookAt",
-                eye : { x: 0.0, y: 10.0, z: 15 },
-                look : { y:1.0 },
-                up : { y: 1.0 },
-
-                nodes: [
-
-                    /* Camera describes the projection
-                     */
-                    {
-                        type: "camera",
-                        optics: {
-                            type: "perspective",
-                            fovy : 25.0,
-                            aspect : 1.47,
-                            near : 0.10,
-                            far : 300.0
-                        },
-
-                        nodes: [
-
-
-                            /* A lights node inserts point lights into scene, to illuminate everything
-                             * that is encountered after them during scene traversal.
-                             *
-                             * You can have many of these, nested within modelling transforms if you want to move them.
-                             */
-                            {
-                                type: "light",
-                                mode:                   "dir",
-                                color:                  { r: 1.0, g: 1.0, b: 1.0 },
-                                diffuse:                true,
-                                specular:               true,
-                                dir:                    { x: 1.0, y: -0.5, z: -1.0 }
-                            },
-
-                            {
-                                type: "light",
-                                mode:                   "dir",
-                                color:                  { r: 1.0, g: 1.0, b: 0.8 },
-                                diffuse:                true,
-                                specular:               false,
-                                dir:                    { x: 0.0, y: -0.5, z: -1.0 }
-                            },
-
-                            /* Next, modelling transforms to orient our teapot. See how these have IDs,
-                             * so we can access them to set their angle attributes.
-                             */
-                            {
-                                type: "rotate",
-                                id: "pitch",
-                                angle: 0.0,
-                                x : 1.0,
-
-                                nodes: [
-                                    {
-                                        type: "rotate",
-                                        id: "yaw",
-                                        angle: 0.0,
-                                        y : 1.0,
-
-                                        nodes: [
-
-                                            /* Specify the amounts of ambient, diffuse and specular
-                                             * lights our teapot reflects
-                                             */
-                                            {
-                                                type: "material",
-                                                emit: 0,
-                                                baseColor:      { r: 0.3, g: 0.3, b: 0.9 },
-                                                specularColor:  { r: 0.9, g: 0.9, b: 0.9 },
-                                                specular:       0.7,
-                                                shine:          10.0,
-
-                                                nodes: boxes
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    });
-
-    /*----------------------------------------------------------------------
-     * Scene rendering loop and mouse handler stuff follows
-     *---------------------------------------------------------------------*/
-    var yaw = 0;
-    var pitch = 0;
-    var lastX;
-    var lastY;
-    var dragging = false;
-
-
-    SceneJS.withNode("theScene").render();
-
-    var canvas = document.getElementById("theCanvas");
-
-    function mouseDown(event) {
-        lastX = event.clientX;
-        lastY = event.clientY;
-        dragging = true;
+    
+    objects[1].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
+    objects[2].setMovement([0.0,0.0,0.0], [0.0,-2.0,0.0]);
+*/
+    objects = [];
+    var randomRange = 5;
+    for(i = 0; i < 10; i+=1) {
+        objects[i] = makeObject('sphere', [(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange], [0.5,0.5,0.5], null, "box" + i);
+        objects[i].setMovement([0.0,0.0,0.0], [Math.random()-0.5,Math.random()-0.5,Math.random()-0.5]);
     }
 
-    function mouseUp() {
-        dragging = false;
-    }
+    initScene(objects, settings);
 
-    /* On a mouse drag, we'll re-render the scene, passing in
-     * incremented angles in each time.
-     */
-    function mouseMove(event) {
-        if (dragging) {
-            yaw += (event.clientX - lastX) * 0.5;
-            pitch += (event.clientY - lastY) * 0.5;
-
-            SceneJS.withNode("yaw").set("angle", yaw);
-            SceneJS.withNode("pitch").set("angle", pitch);
-
-            lastX = event.clientX;
-            lastY = event.clientY;
-        }
-    }
-
-    canvas.addEventListener('mousedown', mouseDown, true);
-    canvas.addEventListener('mousemove', mouseMove, true);
-    canvas.addEventListener('mouseup', mouseUp, true);
-
-
-    SceneJS.withNode("theScene").start();
-
+    // for spheres
     var detectCollision = function (box1, box2) {
-        var dist = M.subVec(box1.nextPosition, box2.nextPosition),
-            i, newSpeed, count = 0,
+        var dist = M.vecLength([box1.nextPosition, box2.nextPosition]),
+            collisionNormal, relativeVelocity, Vrn, fCr = 0, j,
             radiusSum = box1.boundingSphereRadius + box2.boundingSphereRadius;
-        for(i = 0;i<dist.length;i+=1) {
-            if(Math.abs(dist[i]) < radiusSum) {
-                count += 1;
-            }
-        }
-        if(count == dist.length) {
-            newSpeed = M.multiVec(M.addVec(box1.speed, box1.speed),0.5);
-            //console.log("collision of", box1.id, "and", box2.id, "new speed", newSpeed);
-            box1.setMovement(newSpeed);
-            box2.setMovement(M.multiVec(newSpeed,-1));
-        }
-    }
 
-//  boxes[0].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
-    boxes[1].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
-    boxes[2].setMovement([0.0,0.0,0.0], [0.0,-2.0,0.0]);
 
+        if(dist <= radiusSum) {
+
+            collisionNormal = M.multiVec(M.subVec(box1.nextPosition, box2.nextPosition),1.0/dist); // normalization
+            relativeVelocity = M.subVec(box1.speed, box2.speed);
+            Vrn = M.multiVecVec(collisionNormal, relativeVelocity);
+
+//            console.log("collision of", box1.id, "and", box2.id, collisionNormal, relativeVelocity, Vrn);
+
+            j = (-(1+fCr) * Vrn) / ( M.multiVecVec(collisionNormal, collisionNormal) ); // * (1/box1.mass + 1/box2.mass));
+
+            // collision code
+            box1.setMovement(M.addVec(box1.speed, M.multiVec(collisionNormal,j)));
+            box2.setMovement(M.subVec(box1.speed, M.multiVec(collisionNormal,j)));
+        }
+    };
 
     var frameTime = 1000/30,
         time = Date.now(),
@@ -301,12 +184,12 @@ $(window).ready(function() {
             prevTime = time;
             time = Date.now();
 
-            for(i=0;i < boxes.length; i+=1) {
-                boxes[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
-                for(j=i+1;j < boxes.length; j+=1) {
-                    detectCollision(boxes[i], boxes[j]);
+            for(i=0;i < objects.length; i+=1) {
+                objects[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
+                for(j=i+1;j < objects.length; j+=1) {
+                    detectCollision(objects[i], objects[j]);
                 }
-                boxes[i].updatePosition();
+                objects[i].updatePosition();
             }
 
         window.setTimeout(renderLoop, frameTime);
