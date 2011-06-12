@@ -1,0 +1,467 @@
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+index def6a6a..275077f 100644
+--- a/.idea/vcs.xml
++++ b/.idea/vcs.xml
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="VcsDirectoryMappings">
+-    <mapping directory="" vcs="" />
++    <mapping directory="" vcs="Git" />
+   </component>
+ </project>
+ 
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+index 04d16cd..8071a35 100644
+--- a/.idea/workspace.xml
++++ b/.idea/workspace.xml
+@@ -1,7 +1,14 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="ChangeListManager">
+-    <list default="true" id="6501b6d5-d5b1-4ad8-af10-e806812c31a2" name="Default" comment="" />
++    <list default="true" id="6501b6d5-d5b1-4ad8-af10-e806812c31a2" name="Default" comment="">
++      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/js/math.js" />
++      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
++      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
++      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
++      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/initScene.js" afterPath="$PROJECT_DIR$/js/initScene.js" />
++      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/load.js" afterPath="$PROJECT_DIR$/js/load.js" />
++    </list>
+     <ignored path="webgl_physics.iws" />
+     <ignored path=".idea/workspace.xml" />
+     <option name="TRACKING_ENABLED" value="true" />
+@@ -26,25 +33,34 @@
+       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+         <entry file="file://$PROJECT_DIR$/index.html">
+           <provider selected="true" editor-type-id="text-editor">
+-            <state line="14" column="0" selection-start="527" selection-end="662" vertical-scroll-proportion="0.0">
++            <state line="13" column="38" selection-start="396" selection-end="414" vertical-scroll-proportion="0.0">
+               <folding />
+             </state>
+           </provider>
+         </entry>
+       </file>
+-      <file leaf-file-name="scenejs.js" pinned="false" current="false" current-in-tab="false">
+-        <entry file="file://$PROJECT_DIR$/lib/scenejs.js">
++      <file leaf-file-name="load.js" pinned="false" current="true" current-in-tab="true">
++        <entry file="file://$PROJECT_DIR$/js/load.js">
+           <provider selected="true" editor-type-id="text-editor">
+-            <state line="24" column="20" selection-start="670" selection-end="670" vertical-scroll-proportion="0.0">
++            <state line="83" column="0" selection-start="2538" selection-end="3452" vertical-scroll-proportion="0.52057415">
+               <folding />
+             </state>
+           </provider>
+         </entry>
+       </file>
+-      <file leaf-file-name="load.js" pinned="false" current="true" current-in-tab="true">
+-        <entry file="file://$PROJECT_DIR$/js/load.js">
++      <file leaf-file-name="math.js" pinned="false" current="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/js/math.js">
++          <provider selected="true" editor-type-id="text-editor">
++            <state line="35" column="0" selection-start="778" selection-end="778" vertical-scroll-proportion="0.0">
++              <folding />
++            </state>
++          </provider>
++        </entry>
++      </file>
++      <file leaf-file-name="initScene.js" pinned="false" current="false" current-in-tab="false">
++        <entry file="file://$PROJECT_DIR$/js/initScene.js">
+           <provider selected="true" editor-type-id="text-editor">
+-            <state line="37" column="65" selection-start="1085" selection-end="1085" vertical-scroll-proportion="0.6315261">
++            <state line="39" column="44" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0">
+               <folding />
+             </state>
+           </provider>
+@@ -57,16 +73,22 @@
+       <setting name="OPEN_NEW_TAB" value="false" />
+     </FindUsagesManager>
+   </component>
++  <component name="Git.Settings">
++    <option name="CHECKOUT_INCLUDE_TAGS" value="false" />
++    <option name="UPDATE_CHANGES_POLICY" value="STASH" />
++  </component>
+   <component name="IdeDocumentHistory">
+     <option name="changedFiles">
+       <list>
+         <option value="$PROJECT_DIR$/js/load2.js" />
++        <option value="$PROJECT_DIR$/js/Math.js" />
+         <option value="$PROJECT_DIR$/index.html" />
++        <option value="$PROJECT_DIR$/js/initScene.js" />
+         <option value="$PROJECT_DIR$/js/load.js" />
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
++  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+     <OptionsSetting value="true" id="Add" />
+     <OptionsSetting value="true" id="Remove" />
+     <OptionsSetting value="true" id="Checkout" />
+@@ -92,7 +114,6 @@
+       <sortByType />
+     </navigator>
+     <panes>
+-      <pane id="Favorites" />
+       <pane id="ProjectPane">
+         <subPane>
+           <PATH>
+@@ -135,12 +156,31 @@
+               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+             </PATH_ELEMENT>
+             <PATH_ELEMENT>
++              <option name="myItemId" value="lib" />
++              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
++            </PATH_ELEMENT>
++            <PATH_ELEMENT>
++              <option name="myItemId" value="utils" />
++              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
++            </PATH_ELEMENT>
++          </PATH>
++          <PATH>
++            <PATH_ELEMENT>
++              <option name="myItemId" value="webgl_physics" />
++              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
++            </PATH_ELEMENT>
++            <PATH_ELEMENT>
++              <option name="myItemId" value="webgl_physics" />
++              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
++            </PATH_ELEMENT>
++            <PATH_ELEMENT>
+               <option name="myItemId" value="js" />
+               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+             </PATH_ELEMENT>
+           </PATH>
+         </subPane>
+       </pane>
++      <pane id="Favorites" />
+       <pane id="Scope" />
+     </panes>
+   </component>
+@@ -178,6 +218,7 @@
+     <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+     <option name="FORCE_UPDATE" value="false" />
++    <configuration useDefault="true">C:\Users\fridek\AppData\Roaming\Subversion</configuration>
+     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+   </component>
+   <component name="TaskManager">
+@@ -196,11 +237,11 @@
+       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+-      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.257566" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
++      <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
++      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.36767545" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
+       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
++      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+@@ -258,21 +299,29 @@
+         <state line="9" column="21" selection-start="296" selection-end="296" vertical-scroll-proportion="0.0" />
+       </provider>
+     </entry>
++    <entry file="file://$PROJECT_DIR$/lib/scenejs.js">
++      <provider selected="true" editor-type-id="text-editor">
++        <state line="58" column="36" selection-start="1979" selection-end="1979" vertical-scroll-proportion="0.0" />
++      </provider>
++    </entry>
+     <entry file="file://$PROJECT_DIR$/index.html">
+       <provider selected="true" editor-type-id="text-editor">
+-        <state line="14" column="0" selection-start="527" selection-end="662" vertical-scroll-proportion="0.0">
+-          <folding />
+-        </state>
++        <state line="13" column="38" selection-start="396" selection-end="414" vertical-scroll-proportion="0.0" />
+       </provider>
+     </entry>
+-    <entry file="file://$PROJECT_DIR$/lib/scenejs.js">
++    <entry file="file://$PROJECT_DIR$/js/math.js">
++      <provider selected="true" editor-type-id="text-editor">
++        <state line="35" column="0" selection-start="778" selection-end="778" vertical-scroll-proportion="0.0" />
++      </provider>
++    </entry>
++    <entry file="file://$PROJECT_DIR$/js/initScene.js">
+       <provider selected="true" editor-type-id="text-editor">
+-        <state line="24" column="20" selection-start="670" selection-end="670" vertical-scroll-proportion="0.0" />
++        <state line="39" column="44" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0" />
+       </provider>
+     </entry>
+     <entry file="file://$PROJECT_DIR$/js/load.js">
+       <provider selected="true" editor-type-id="text-editor">
+-        <state line="37" column="65" selection-start="1085" selection-end="1085" vertical-scroll-proportion="0.6315261">
++        <state line="83" column="0" selection-start="2538" selection-end="3452" vertical-scroll-proportion="0.52057415">
+           <folding />
+         </state>
+       </provider>
+diff --git a/index.html b/index.html
+index 5989404..c9b38a9 100644
+--- a/index.html
++++ b/index.html
+@@ -10,9 +10,15 @@
+                 &lt;canvas&gt; feature.</p>
+         </canvas>
+         <br/><br/>
++
++        <button id="camera_perspective">Perspective camera</button>
++        <button id="camera_top">Top camera</button>
++        <button id="camera_front">Front camera</button>
++
+         <div id="theLoggingDiv"></div>
+         <script src="lib/jquery-1.6.1.min.js" type="text/javascript"></script>
+         <script type="text/javascript" src="lib/scenejs.js"></script>
++        <script type="text/javascript" src="js/math.js"></script>
+         <script type="text/javascript" src="js/initScene.js"></script>
+         <script type="text/javascript" src="js/load.js"></script>
+     </body>
+diff --git a/js/Math.js b/js/Math.js
+new file mode 100644
+index 0000000..b81906e
+--- /dev/null
++++ b/js/Math.js
+@@ -0,0 +1,57 @@
++/**
++ * Math.js description here
++ *
++ * @author fridek
++ * @date 05.06.11
++ * @version $
++ */
++
++var M = {
++    multiVec: function (v, f) {
++        var tmp = [], i;
++        for(i=0;i<v.length;i+=1) {
++            tmp[i] = v[i] * f;
++        }
++        return tmp;
++    },
++
++    multiVecVec: function (v1, v2) {
++        if(v1.length != v2.length) throw "Error in multiVecVec: invalid vectors dimensions";
++        var tmp = 0, i;
++        for(i=0;i<v1.length;i+=1) {
++            tmp += v1[i] * v2[i];
++        }
++        return tmp;
++    },
++
++    addVec: function (v1, v2) {
++        if(v1.length != v2.length) throw "Error in addVec: invalid vectors dimensions";
++
++        var tmp = [], i;
++        for(i=0;i<v1.length;i+=1) {
++            tmp[i] = v1[i] + v2[i];
++        }
++        return tmp;
++    },
++
++    subVec: function (v1, v2) {
++        if(v1.length != v2.length) throw "Error in subVec: invalid vectors dimensions";
++
++        var tmp = [], i;
++        for(i=0;i<v1.length;i+=1) {
++            tmp[i] = v1[i] - v2[i];
++        }
++        return tmp;
++    },
++
++    vecLength: function(v) {
++        if(v[0].length != v[1].length) throw "Error in vecLength: invalid vectors dimensions";
++
++        var len = 0, i, t;
++        for(i = 0; i<v[0].length; i+= 1) {
++            t = v[0][i] - v[1][i];
++            len += t*t;
++        }
++        return Math.sqrt(len);
++    }
++};
+diff --git a/js/initScene.js b/js/initScene.js
+index 9a886e5..b26a04c 100644
+--- a/js/initScene.js
++++ b/js/initScene.js
+@@ -37,10 +37,12 @@ function initScene(objects, settings) {
+              */
+             {
+                 type: "lookAt",
+-                eye : { x: 0.0, y: 10.0, z: 15 },
++                eye : { x: 0.0, y: 0.0, z: 80.0 },
+                 look : { y:1.0 },
+                 up : { y: 1.0 },
+ 
++                id: "camera",
++
+                 nodes: [
+ 
+                     /* Camera describes the projection
+@@ -100,6 +102,7 @@ function initScene(objects, settings) {
+                                         nodes: [
+ 
+                                             {
++                                                // floor
+                                                 type: "material",
+                                                 emit: 0,
+                                                 baseColor:      { r: 0.3, g: 0.3, b: 0.3 },
+@@ -203,4 +206,4 @@ function initScene(objects, settings) {
+ 
+     SceneJS.withNode("theScene").start();
+     
+-};
+\ No newline at end of file
++}
+\ No newline at end of file
+diff --git a/js/load.js b/js/load.js
+index 40b9a24..53f0c68 100644
+--- a/js/load.js
++++ b/js/load.js
+@@ -6,56 +6,6 @@ $(window).ready(function() {
+         floorBounce: 0.5
+     };
+ 
+-    var M = {
+-        multiVec: function (v, f) {
+-            var tmp = [], i;
+-            for(i=0;i<v.length;i+=1) {
+-                tmp[i] = v[i] * f;
+-            }
+-            return tmp;
+-        },
+-
+-        multiVecVec: function (v1, v2) {
+-            if(v1.length != v2.length) throw "Error in multiVecVec: invalid vectors dimensions";
+-            var tmp = 0, i;
+-            for(i=0;i<v1.length;i+=1) {
+-                tmp += v1[i] * v2[i];
+-            }
+-            return tmp;
+-        },
+-
+-        addVec: function (v1, v2) {
+-            if(v1.length != v2.length) throw "Error in addVec: invalid vectors dimensions";
+-
+-            var tmp = [], i;
+-            for(i=0;i<v1.length;i+=1) {
+-                tmp[i] = v1[i] + v2[i];
+-            }
+-            return tmp;
+-        },
+-
+-        subVec: function (v1, v2) {
+-            if(v1.length != v2.length) throw "Error in subVec: invalid vectors dimensions";
+-
+-            var tmp = [], i;
+-            for(i=0;i<v1.length;i+=1) {
+-                tmp[i] = v1[i] - v2[i];
+-            }
+-            return tmp;
+-        },
+-
+-        vecLength: function(v) {
+-            if(v[0].length != v[1].length) throw "Error in vecLength: invalid vectors dimensions";
+-
+-            var len = 0, i, t;
+-            for(i = 0; i<v[0].length; i+= 1) {
+-                t = v[0][i] - v[1][i];
+-                len += t*t;
+-            }
+-            return Math.sqrt(len);
+-        }
+-    };
+-
+     var makeObject = function (type, position, scale, boundingSphereRadius, id) {
+         if(!position)   position = [0.0,0.0,0.0];
+         if(!scale)      scale = [1.0,1.0,1.0];
+@@ -130,26 +80,31 @@ $(window).ready(function() {
+         }
+ 
+     };
+-/*
+-    // global on purpose
+-    objects = [
+-            makeObject('sphere', [0.5,0.0,0.0], [0.5,0.5,0.5], null, "box1"),
+-            makeObject('sphere', [0.0,2.0,0.5], [0.5,0.5,0.5], null, "box2"),
+-            makeObject('sphere', [0.5,4.0,0.0], [0.5,0.5,0.5], null, "box3"),
+-            makeObject('sphere', [0.5,3.0,2.0], [0.5,0.5,0.5], null, "box4"),
+-            makeObject('sphere', [0.0,3.0,1.0], [0.5,0.5,0.5], null, "box5")
+-        ];
+-
+-    
+-    objects[1].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
+-    objects[2].setMovement([0.0,0.0,0.0], [0.0,-2.0,0.0]);
+-*/
+-    objects = [];
+-    var randomRange = 5;
+-    for(i = 0; i < 10; i+=1) {
+-        objects[i] = makeObject('sphere', [(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange], [0.5,0.5,0.5], null, "box" + i);
+-        objects[i].setMovement([0.0,0.0,0.0], [Math.random()-0.5,Math.random()-0.5,Math.random()-0.5]);
++
++    var objects = [], i, j, k;
++    /*for(i = 1.0; i < 3.0; i+=1.0) {
++        for(j = 1.0; j < 3.0; j+=1.0) {
++            for(k = 1.0; k < 3.0; k+=1.0) {
++                console.log([i*1.2, j*1.2, k*1.2]);
++                objects[i] = makeObject('sphere', [i*1.2, j*1.2, k*1.2], [0.5,0.5,0.5], null, "box" + i + j + k);
++                objects[i].setMovement([0.0,0.0,0.0]);
++            }
++        }
+     }
++*/
++    objects[0] = makeObject('sphere', [0.0,0.0,0.0], [0.5,0.5,0.5], null, "box");
++    objects[0].setMovement([0.0,0.0,0.0]);
++
++    objects[1] = makeObject('sphere', [1.2,0.0,0.0], [0.5,0.5,0.5], null, "boxx");
++    objects[1].setMovement([0.0,0.0,0.0]);
++
++
++    objects[2] = makeObject('sphere', [1.2,0.0,1.2], [0.5,0.5,0.5], null, "boxx");
++    objects[2].setMovement([0.0,0.0,0.0]);
++
++
++    objects[3] = makeObject('sphere', [0.0,0.0,1.2], [0.5,0.5,0.5], null, "boxx");
++    objects[3].setMovement([0.0,0.0,0.0]);
+ 
+     initScene(objects, settings);
+ 
+@@ -166,11 +121,9 @@ $(window).ready(function() {
+             relativeVelocity = M.subVec(box1.speed, box2.speed);
+             Vrn = M.multiVecVec(collisionNormal, relativeVelocity);
+ 
+-//            console.log("collision of", box1.id, "and", box2.id, collisionNormal, relativeVelocity, Vrn);
+-
+             j = (-(1+fCr) * Vrn) / ( M.multiVecVec(collisionNormal, collisionNormal) ); // * (1/box1.mass + 1/box2.mass));
+ 
+-            // collision code
++            // speed after collision
+             box1.setMovement(M.addVec(box1.speed, M.multiVec(collisionNormal,j)));
+             box2.setMovement(M.subVec(box1.speed, M.multiVec(collisionNormal,j)));
+         }
+@@ -179,7 +132,6 @@ $(window).ready(function() {
+     var frameTime = 1000/30,
+         time = Date.now(),
+         prevTime,
+-        i, j,
+         renderLoop =  function () {
+             prevTime = time;
+             time = Date.now();
+@@ -195,5 +147,18 @@ $(window).ready(function() {
+         window.setTimeout(renderLoop, frameTime);
+     };
+     renderLoop();
++
++    $("#camera_perspective").click(function () {
++        console.log('click');
++        SceneJS.withNode('camera').set({eye: {x: 0.0, y: 10.0, z: 15}})
++    });
++
++    $("#camera_top").click(function () {
++        SceneJS.withNode('camera').set({eye: {x: 0.0, y: 50.0, z: 1.0 }})
++    });
++
++    $("#camera_front").click(function () {
++        SceneJS.withNode('camera').set({eye: {x: 0.0, y: 0.0, z: 80.0 }})
++    });
+ });
+ 

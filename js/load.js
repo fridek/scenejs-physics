@@ -6,56 +6,6 @@ $(window).ready(function() {
         floorBounce: 0.5
     };
 
-    var M = {
-        multiVec: function (v, f) {
-            var tmp = [], i;
-            for(i=0;i<v.length;i+=1) {
-                tmp[i] = v[i] * f;
-            }
-            return tmp;
-        },
-
-        multiVecVec: function (v1, v2) {
-            if(v1.length != v2.length) throw "Error in multiVecVec: invalid vectors dimensions";
-            var tmp = 0, i;
-            for(i=0;i<v1.length;i+=1) {
-                tmp += v1[i] * v2[i];
-            }
-            return tmp;
-        },
-
-        addVec: function (v1, v2) {
-            if(v1.length != v2.length) throw "Error in addVec: invalid vectors dimensions";
-
-            var tmp = [], i;
-            for(i=0;i<v1.length;i+=1) {
-                tmp[i] = v1[i] + v2[i];
-            }
-            return tmp;
-        },
-
-        subVec: function (v1, v2) {
-            if(v1.length != v2.length) throw "Error in subVec: invalid vectors dimensions";
-
-            var tmp = [], i;
-            for(i=0;i<v1.length;i+=1) {
-                tmp[i] = v1[i] - v2[i];
-            }
-            return tmp;
-        },
-
-        vecLength: function(v) {
-            if(v[0].length != v[1].length) throw "Error in vecLength: invalid vectors dimensions";
-
-            var len = 0, i, t;
-            for(i = 0; i<v[0].length; i+= 1) {
-                t = v[0][i] - v[1][i];
-                len += t*t;
-            }
-            return Math.sqrt(len);
-        }
-    };
-
     var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         if(!position)   position = [0.0,0.0,0.0];
         if(!scale)      scale = [1.0,1.0,1.0];
@@ -130,21 +80,8 @@ $(window).ready(function() {
         }
 
     };
-/*
-    // global on purpose
-    objects = [
-            makeObject('sphere', [0.5,0.0,0.0], [0.5,0.5,0.5], null, "box1"),
-            makeObject('sphere', [0.0,2.0,0.5], [0.5,0.5,0.5], null, "box2"),
-            makeObject('sphere', [0.5,4.0,0.0], [0.5,0.5,0.5], null, "box3"),
-            makeObject('sphere', [0.5,3.0,2.0], [0.5,0.5,0.5], null, "box4"),
-            makeObject('sphere', [0.0,3.0,1.0], [0.5,0.5,0.5], null, "box5")
-        ];
 
-    
-    objects[1].setMovement([0.0,0.0,0.0], [0.0,-1.0,0.0]);
-    objects[2].setMovement([0.0,0.0,0.0], [0.0,-2.0,0.0]);
-*/
-    objects = [];
+    var objects = [];
     var randomRange = 5;
     for(i = 0; i < 10; i+=1) {
         objects[i] = makeObject('sphere', [(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange,(Math.random()-0.5)*randomRange], [0.5,0.5,0.5], null, "box" + i);
@@ -195,5 +132,15 @@ $(window).ready(function() {
         window.setTimeout(renderLoop, frameTime);
     };
     renderLoop();
+
+    $('#camera_perspective').click(function () {
+        SceneJS.withNode('camera').set({ eye : { x: 0.0, y: 10.0, z: 15 } });
+    });
+    $('#camera_top').click(function () {
+        SceneJS.withNode('camera').set({ eye : { x: 0.0, y: 50.0, z: 1.0 } });
+    });
+    $('#camera_left').click(function () {
+        SceneJS.withNode('camera').set({ eye : { x: 70.0, y: 1.0, z: 0.0 } });
+    });
 });
 

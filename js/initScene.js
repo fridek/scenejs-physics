@@ -37,9 +37,11 @@ function initScene(objects, settings) {
              */
             {
                 type: "lookAt",
-                eye : { x: 0.0, y: 10.0, z: 15 },
+                eye : { x: 70.0, y: 1.0, z: 0.0 },
                 look : { y:1.0 },
                 up : { y: 1.0 },
+
+                id: "camera",
 
                 nodes: [
 
