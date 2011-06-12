@@ -12,7 +12,7 @@
 //        }
 //    });
 
-function initScene(objects, settings) {
+function initScene(settings) {
 
     SceneJS.createNode({
 
@@ -145,7 +145,7 @@ function initScene(objects, settings) {
                                                 specular:       0.7,
                                                 shine:          10.0,
 
-                                                nodes: objects
+                                                id: "objects-parent"
                                             }
                                         ]
                                     }
