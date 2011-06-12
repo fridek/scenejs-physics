@@ -57,6 +57,8 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         position: position,
         nextPosition: [0.0,0.0,0.0],
 
+        scale: scale,
+
         speed: [0.0,0.0,0.0],
         acceleration: settings.gravity,
 

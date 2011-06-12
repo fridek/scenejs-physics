@@ -12,6 +12,9 @@ $(window).ready(function() {
         SceneJS.createNode(objects[i]);
     }
 
+    var box = makeObject('box', [0.0,-7.0,0.0], [5.0,1.0,3.0], null, 'box');
+    SceneJS.createNode(box);
+
     var frameTime = 1000/30,
         time = Date.now(),
         prevTime,
@@ -23,6 +26,17 @@ $(window).ready(function() {
                 objects[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
                 for(j=i+1;j < objects.length; j+=1) {
                     detectCollision(objects[i], objects[j]);
+                }
+                if(detectCollisionBoxSphere(box, objects[i])) {
+                    SceneJS.withNode(objects[i].id)
+                    .insert("node", {
+                        type: "material",
+                        emit: 0,
+                        baseColor:      { r: 0.9, g: 0.3, b: 0.3 },
+                        specularColor:  { r: 0.9, g: 0.3, b: 0.3 },
+                        specular:       0.7,
+                        shine:          10.0
+                    });
                 }
                 objects[i].updatePosition();
             }
