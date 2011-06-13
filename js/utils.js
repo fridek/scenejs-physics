@@ -26,9 +26,9 @@ function generateSpheresCube(x,y,z,distance,random_movements) {
         k_end = 0.5 * z * distance,
         objects = [];
 
-    for(i = i_start; i <= i_end; i+=distance) {
-        for(j = j_start; j <= j_end; j+=distance) {
-            for(k = k_start; k <= k_end; k+=distance) {
+    for(i = i_start; i < i_end; i+=distance) {
+        for(j = j_start; j < j_end; j+=distance) {
+            for(k = k_start; k < k_end; k+=distance) {
             objects[cnt] = makeObject('sphere', [i,j,k], [0.5,0.5,0.5], null, "box" + cnt);
             if(random_movements) {
                 objects[cnt].setMovement([0.0,0.0,0.0], [Math.random()-0.5,Math.random()-0.5,Math.random()-0.5]);

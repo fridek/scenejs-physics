@@ -57,6 +57,11 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             this.position = this.nextPosition;
         },
 
+        stepBack: function () {
+            this.nextPosition = this.prevPosition;
+            this.position = this.prevPosition;
+        },
+
         prevPosition: [0.0,0.0,0.0],
         position: position,
         nextPosition: [0.0,0.0,0.0],

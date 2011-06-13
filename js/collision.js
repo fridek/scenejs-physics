@@ -34,12 +34,11 @@ function detectCollisionBoxSphere(box, sphere) {
         // sphere centre relative to box centre
         relCentre = M.subVec(sphere.position,box.position),
         // box size
-       // box_size = M.multiVec(box.scale,0.5),
         box_size = box.scale,
 
         collisionNormal, penetration, Vrn, restitution = 1, closestPtWorld, j, i;
 
-    // simple check if sphere is too far to possibly have any contact
+    // simple check if sphere is too far to possibly have any contact (SAT)
     if (Math.abs(relCentre[0]) - sphere.boundingSphereRadius > box_size[0] ||
         Math.abs(relCentre[1]) - sphere.boundingSphereRadius > box_size[1] ||
         Math.abs(relCentre[2]) - sphere.boundingSphereRadius > box_size[2] ) {
@@ -65,31 +64,17 @@ function detectCollisionBoxSphere(box, sphere) {
 
     closestPtWorld = M.addVec(closestPt,box.position);
 
-    collisionNormal = M.subVec(closestPtWorld, centre);
+    collisionNormal = M.subVec(centre, closestPtWorld);
     collisionNormal = M.vecNormalise(collisionNormal);
 
-/*
+    sphere.stepBack();
+
     Vrn = [];
     for(i=0;i<collisionNormal.length;i+=1) Vrn[i] = collisionNormal[i] * sphere.speed[i];
 
-//    i = M.multiVecVec(collisionNormal, collisionNormal);
-//    if(i != 0) {
-
     j = M.multiVec(Vrn,-(1+restitution));
 
-//    } else {
-//        j = 0;
-//    }
-    console.log('collision', Date.now(),
-            'col normal', collisionNormal,
-            'penetration', penetration,
-            'Vrn', Vrn,
-            'j', j,
-            'sphere speed', sphere.speed
-    );
-//    console.log(sphere.speed, M.multiVec(collisionNormal,j));
+    sphere.setMovement(M.addVec(sphere.speed, j));
 
-    sphere.setMovement(M.subVec(sphere.speed, j));
-*/
     return true;
 }

@@ -1,11 +1,11 @@
 var settings = {
     gravity: [0.0,-1.0,0.0],
-    floorLevel: -10,
+    floorLevel: -15,
     floorBounce: 0.5
 };
 
 $(window).ready(function() {
-    var objects = generateSpheresCube(4,4,4,2,true);
+    var objects = generateSpheresCube(5,5,5,2,true);
     initScene(settings);
 
     for(var i = 0; i < objects.length; i+=1) {
