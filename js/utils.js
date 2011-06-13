@@ -18,12 +18,12 @@
  */
 function generateSpheresCube(x,y,z,distance,random_movements) {
     var i, j, k, cnt = 0,
-        i_start = -1*x*0.5 * distance,
-        i_end = x*0.5 * distance,
-        j_start = -1*y*0.5 * distance,
-        j_end = y*0.5 * distance,
-        k_start = -1*z*0.5 * distance,
-        k_end = z*0.5 * distance,
+        i_start = -0.5*x*distance,
+        i_end = 0.5*x*distance,
+        j_start = -0.5 * y * distance,
+        j_end = 0.5 * y * distance,
+        k_start = -0.5 * z * distance,
+        k_end = 0.5 * z * distance,
         objects = [];
 
     for(i = i_start; i <= i_end; i+=distance) {

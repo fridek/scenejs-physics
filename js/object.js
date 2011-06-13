@@ -36,6 +36,10 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             if(a) this.acceleration = M.addVec(a, settings.gravity);
         },
 
+        setPosition: function (p) {
+            this.position = p;
+        },
+
         calculateNextPosition: function (time) {
             this.speed = M.addVec(this.speed,M.multiVec(this.acceleration,time));
             this.nextPosition = M.addVec(this.position,M.multiVec(this.speed,time));

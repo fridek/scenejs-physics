@@ -205,4 +205,4 @@ function initScene(settings) {
 
     SceneJS.withNode("theScene").start();
     
-};
+}

@@ -19,7 +19,7 @@ var detectCollision = function (obj1, obj2) {
         relativeVelocity = M.subVec(obj1.speed, obj2.speed);
         Vrn = M.multiVecVec(collisionNormal, relativeVelocity);
 
-        j = (-(1+fCr) * Vrn) / ( M.multiVecVec(collisionNormal, collisionNormal) ); // * (1/obj1.mass + 1/obj2.mass));
+        j = (-(1+fCr) * Vrn) / M.multiVecVec(collisionNormal, collisionNormal); // * (1/obj1.mass + 1/obj2.mass));
 
         // collision code
         obj1.setMovement(M.addVec(obj1.speed, M.multiVec(collisionNormal,j)));
@@ -27,59 +27,69 @@ var detectCollision = function (obj1, obj2) {
     }
 };
 
-
+// AABB + sphere
 function detectCollisionBoxSphere(box, sphere) {
-    // Transform the centre of the sphere into box coordinates
-// ignorujemy, box bedzie nie obrocony
-//    Vector3 centre = sphere.getAxis(3);
-//    Vector3 relCentre = box.transform.transformInverse(centre);
 
     var centre = sphere.position,
+        // sphere centre relative to box centre
         relCentre = M.subVec(sphere.position,box.position),
-        box_halfSize = box.scale;
-    
-    
-    // Early out check to see if we can exclude the contact
-    if (Math.abs(relCentre[0]) - sphere.boundingSphereRadius > box_halfSize[0] ||
-        Math.abs(relCentre[1]) - sphere.boundingSphereRadius > box_halfSize[1] ||
-        Math.abs(relCentre[2]) - sphere.boundingSphereRadius > box_halfSize[2])
-    {
+        // box size
+       // box_size = M.multiVec(box.scale,0.5),
+        box_size = box.scale,
+
+        collisionNormal, penetration, Vrn, restitution = 1, closestPtWorld, j, i;
+
+    // simple check if sphere is too far to possibly have any contact
+    if (Math.abs(relCentre[0]) - sphere.boundingSphereRadius > box_size[0] ||
+        Math.abs(relCentre[1]) - sphere.boundingSphereRadius > box_size[1] ||
+        Math.abs(relCentre[2]) - sphere.boundingSphereRadius > box_size[2] ) {
         return false;
     }
 
+    // SAT may fail near box vertex
     var closestPt = [0,0,0], dist;
 
-    // Clamp each coordinate to the box.
-    dist = relCentre[0];
-    if (dist > box_halfSize[0]) dist = box_halfSize[0];
-    if (dist < -box_halfSize[0]) dist = -box_halfSize[0];
-    closestPt[0] = dist;
-
-    dist = relCentre[1];
-    if (dist > box_halfSize[1]) dist = box_halfSize[1];
-    if (dist < -box_halfSize[1]) dist = -box_halfSize[1];
-    closestPt[1] = dist;
-
-    dist = relCentre[2];
-    if (dist > box_halfSize[2]) dist = box_halfSize[2];
-    if (dist < -box_halfSize[2]) dist = -box_halfSize[2];
-    closestPt[2] = dist;
+    // find point closest to box center
+    // Arvo's algorithm
+    for(i = 0; i<=2; i+=1) {
+        dist = relCentre[i];
+        if (dist > box_size[i]) dist = box_size[i];
+        if (dist < -box_size[i]) dist = -box_size[i];
+        closestPt[i] = dist;
+    }
 
     // Check we're in contact
-    dist = M.vecLength(M.subVec(closestPt, relCentre));
-    if (dist > sphere.radius * sphere.radius) return false;
+    dist = M.vec1Length(M.subVec(closestPt, relCentre));
+    penetration = sphere.boundingSphereRadius - dist;
+    if (penetration < 0) return false;
+
+    closestPtWorld = M.addVec(closestPt,box.position);
+
+    collisionNormal = M.subVec(closestPtWorld, centre);
+    collisionNormal = M.vecNormalise(collisionNormal);
+
 /*
-    // Compile the contact
-    Vector3 closestPtWorld = box.transform.transform(closestPt);
+    Vrn = [];
+    for(i=0;i<collisionNormal.length;i+=1) Vrn[i] = collisionNormal[i] * sphere.speed[i];
 
-    Contact* contact = data->contacts;
-    contact->contactNormal = (closestPtWorld - centre);
-    contact->contactNormal.normalise();
-    contact->contactPoint = closestPtWorld;
-    contact->penetration = sphere.radius - Math.sqrt(dist);
-    contact->setBodyData(box.body, sphere.body, data->friction, data->restitution);
+//    i = M.multiVecVec(collisionNormal, collisionNormal);
+//    if(i != 0) {
 
-    data->addContacts(1);
+    j = M.multiVec(Vrn,-(1+restitution));
+
+//    } else {
+//        j = 0;
+//    }
+    console.log('collision', Date.now(),
+            'col normal', collisionNormal,
+            'penetration', penetration,
+            'Vrn', Vrn,
+            'j', j,
+            'sphere speed', sphere.speed
+    );
+//    console.log(sphere.speed, M.multiVec(collisionNormal,j));
+
+    sphere.setMovement(M.subVec(sphere.speed, j));
 */
     return true;
 }

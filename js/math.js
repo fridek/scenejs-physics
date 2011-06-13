@@ -53,5 +53,17 @@ var M = {
             len += t*t;
         }
         return Math.sqrt(len);
+    },
+
+    vec1Length: function (v) {
+        var length = 0;
+        for(var i=0;i<v.length;i+=1) length+=v[i]*v[i];
+        return Math.sqrt(length);
+    },
+
+    vecNormalise: function(v) {
+        var length = M.vec1Length(v);
+        if(length == 0) return v;
+        return M.multiVec(v, 1/length);
     }
 };
