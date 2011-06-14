@@ -1,7 +1,14 @@
+/**
+ * Main loading file
+ */
+
 var settings = {
     gravity: [0.0,-1.0,0.0],
     floorLevel: -15,
-    floorBounce: 0.5
+    floorRestitution: 0.5,
+    frameTime: 1000/30,
+
+    watchedSphere: 2 + 5* 0 + 5*5 * 2
 };
 
 $(window).ready(function() {
@@ -15,7 +22,7 @@ $(window).ready(function() {
     var box = makeObject('box', [0.0,-7.0,0.0], [5.0,1.0,3.0], 5.0, 'box');
     SceneJS.createNode(box);
 
-    SceneJS.withNode(objects[0].id)
+    SceneJS.withNode(objects[settings.watchedSphere].id)
                         .insert("node", {
                             type: "material",
                             emit: 0,
@@ -26,22 +33,28 @@ $(window).ready(function() {
                         });
 
     var log = $('#log');
-    var run = true;
+    var run = false;
 
-    var frameTime = 1000/30,
-//        time = Date.now(),
-//        prevTime,
-        renderLoop =  function () {
-//            prevTime = time;
-//            time = Date.now();
+    var collisions = [], tmp;
+    
+    /**
+     * Every render loop consists of:
+     * - calculating new position based on acceleration, speed and prev. position
+     * - detection of sphere-sphere collisions
+     * - detection of sphere-big box collision
+     * - position update based on step 1 & adjustments forced by collisions
+     */
+     var renderLoop =  function () {
 
             for(i=0;i < objects.length; i+=1) {
-//                objects[i].calculateNextPosition(1.0 * (time-prevTime) / 1000.0);
-                objects[i].calculateNextPosition(1.0 * (frameTime) / 1000.0);
+                objects[i].calculateNextPosition(1.0 * (settings.frameTime) / 1000.0);
+                
                 for(j=i+1;j < objects.length; j+=1) {
                     detectCollision(objects[i], objects[j]);
                 }
+
                 if(detectCollisionBoxSphere(box, objects[i])) {
+                    // if sphere collided with bog box, paint it red
                     if(!objects[i].red) {
                         SceneJS.withNode(objects[i].id)
                         .insert("node", {
@@ -55,14 +68,16 @@ $(window).ready(function() {
                         objects[i].red = true; // avoid multiple material definition
                     }
                 }
+
                 objects[i].updatePosition();
             }
 
-        log.html('x: ' + objects[0].position[0] + 'y: ' + objects[0].position[1] + 'z: ' + objects[0].position[2]);
+        log.html('x: ' + objects[settings.watchedSphere].position[0] +
+                'y: ' + objects[settings.watchedSphere].position[1] +
+                'z: ' + objects[settings.watchedSphere].position[2]);
 
-        if(run) window.setTimeout(renderLoop, frameTime);
+        if(run) window.setTimeout(renderLoop, settings.frameTime);
     };
-    renderLoop();
 
     $('#camera_perspective').click(function () {
         SceneJS.withNode('camera').set({ eye : { x: 0.0, y: 10.0, z: 15 } });

@@ -19,9 +19,9 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
     if(!scale)      scale = [1.0,1.0,1.0];
     if(!boundingSphereRadius) boundingSphereRadius = scale[0];
 
-    // console.log('create object: ', type, position, scale, id);
-
     return {
+        objectType: type,
+
         transform: function (p, s) {
             if(p) {
                 SceneJS.withNode(id + '-translate').set({ x: p[0], y: p[1], z: p[2] })
@@ -32,32 +32,51 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         },
 
         setMovement: function (s, a) {
-            if(s) this.speed = s;
+            if(this.objectType != "sphere") return; // not suppoerted yet
+
+            if(s) {
+                this.speed = s;
+                this.nextSpeed = s;
+            }
             if(a) this.acceleration = M.addVec(a, settings.gravity);
         },
 
         setPosition: function (p) {
+            if(this.objectType != "sphere") return; // not suppoerted yet
+
             this.position = p;
         },
 
-        calculateNextPosition: function (time) {
-            this.speed = M.addVec(this.speed,M.multiVec(this.acceleration,time));
-            this.nextPosition = M.addVec(this.position,M.multiVec(this.speed,time));
+        _calculateNextPositionMethod: movement.euler_modified,
 
+        calculateNextPosition: function (time) {
+            this._calculateNextPositionMethod.apply(this, [time]);
+
+            /**
+             * forbidden area
+             * to be removed later
+             */
             if(this.nextPosition[1] < (settings.floorLevel + this.boundingSphereRadius)) {
                 this.acceleration[1] = settings.gravity[1];
-                this.speed[1] *= -1 * settings.floorBounce;
+                this.nextSpeed[1] *= -1 * settings.floorRestitution;
                 this.nextPosition[1] = settings.floorLevel + this.boundingSphereRadius;
             }
         },
 
         updatePosition: function () {
+            if(this.objectType != "sphere") return; // not suppoerted yet
+
             this.transform(this.nextPosition);
+
             this.prevPosition = this.position;
             this.position = this.nextPosition;
+
+            this.speed = this.nextSpeed;
         },
 
         stepBack: function () {
+            if(this.objectType != "sphere") return; // not suppoerted yet
+
             this.nextPosition = this.prevPosition;
             this.position = this.prevPosition;
         },
@@ -69,6 +88,7 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         scale: scale,
 
         speed: [0.0,0.0,0.0],
+        nextSpeed: [0.0,0.0,0.0],
         acceleration: settings.gravity,
 
         boundingSphereRadius: boundingSphereRadius,
