@@ -6,13 +6,16 @@ var settings = {
     gravity: [0.0,-1.0,0.0],
     floorLevel: -15,
     floorRestitution: 0.5,
-    frameTime: 1000/30,
+    frameTime: 0,
+    simulationTime: 1000/30,
+
+    log: false,
 
     watchedSphere: 2 + 5* 0 + 5*5 * 2
 };
 
 $(window).ready(function() {
-    var objects = generateSpheresCube(5,5,5,2,true);
+    window.objects = generateSpheresCube(5,5,5,2,true);
     initScene(settings);
 
     for(var i = 0; i < objects.length; i+=1) {
@@ -35,8 +38,6 @@ $(window).ready(function() {
     var log = $('#log');
     var run = false;
 
-    var collisions = [], tmp;
-    
     /**
      * Every render loop consists of:
      * - calculating new position based on acceleration, speed and prev. position
@@ -47,9 +48,9 @@ $(window).ready(function() {
      var renderLoop =  function () {
 
             for(i=0;i < objects.length; i+=1) {
-                objects[i].calculateNextPosition(1.0 * (settings.frameTime) / 1000.0);
+                objects[i].calculateNextPosition(1.0 * settings.simulationTime / 1000.0);
                 
-                for(j=i+1;j < objects.length; j+=1) {
+                for(var j=i+1;j < objects.length; j+=1) {
                     detectCollision(objects[i], objects[j]);
                 }
 
@@ -73,8 +74,8 @@ $(window).ready(function() {
             }
 
         log.html('x: ' + objects[settings.watchedSphere].position[0] +
-                'y: ' + objects[settings.watchedSphere].position[1] +
-                'z: ' + objects[settings.watchedSphere].position[2]);
+                 'y: ' + objects[settings.watchedSphere].position[1] +
+                 'z: ' + objects[settings.watchedSphere].position[2]);
 
         if(run) window.setTimeout(renderLoop, settings.frameTime);
     };
@@ -96,6 +97,10 @@ $(window).ready(function() {
             run = true;
             renderLoop();
         }
+    });
+
+    $('#log_button').click(function () {
+        settings.log = !settings.log;
     });
 });
 

@@ -38,7 +38,11 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
                 this.speed = s;
                 this.nextSpeed = s;
             }
-            if(a) this.acceleration = M.addVec(a, settings.gravity);
+            if(a) {
+                console.log('before', this.acceleration);
+                this.acceleration = M.addVec(a, settings.gravity);
+                console.log('after', this.acceleration);
+            }
         },
 
         setPosition: function (p) {
@@ -64,7 +68,7 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
         },
 
         updatePosition: function () {
-            if(this.objectType != "sphere") return; // not suppoerted yet
+            if(this.objectType != "sphere") return; // not supported yet
 
             this.transform(this.nextPosition);
 
@@ -74,8 +78,28 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             this.speed = this.nextSpeed;
         },
 
-        stepBack: function () {
-            if(this.objectType != "sphere") return; // not suppoerted yet
+        stepBack: function (collisionNormal, penetration, direction) {
+            if(this.objectType != "sphere") return; // not supported yet
+
+            /*
+            * each object should be moved by penetration*direction/2 to be back in point where collision occured
+            * second penetration*direction/2 is approximation of path it could move after collision
+            * correct aproach would be to calculate time of penetration, contract by penetration*direction/2 and
+            * calculate new movement with new speed and calculated time
+             */
+
+//            var correction = M.multiVec(collisionNormal, penetration*direction/2),
+//                wrongMove = M.subVec(this.nextPosition, this.position),
+//                newMove = M.subVec(wrongMove, correction);
+//
+//            if(settings.log) {
+//                console.log(this.position, this.nextPosition);
+//                console.log(collisionNormal, penetration, direction, correction);
+//            }
+//
+//            this.nextPosition = M.addVec(this.prevPosition, newMove);
+//            this.nextPosition = M.addVec(this.position, newMove);
+            //this.position = M.addVec(this.prevPosition, newMove);
 
             this.nextPosition = this.prevPosition;
             this.position = this.prevPosition;

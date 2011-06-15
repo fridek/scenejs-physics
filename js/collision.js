@@ -10,38 +10,67 @@
 
     var col;
 
-    var Collision = function (obj1, obj2, collisionNormal, restitution) {
+    var Collision = function (obj1, obj2, collisionNormal, restitution, penetration, posteriori) {
+            if(settings.log) console.log('collision', obj1, obj2, penetration, collisionNormal);
+
+            /*
+            * a priori
+            * very rare - when a posteriori collision moves sphere right into another causing undetected collision
+            * nextPosition is equal to position and prevPosition then, so we can't step back
+            * applying punishment is fast way to deal with such errors
+             */
+            if(!posteriori) {
+                var punish = M.multiVec(collisionNormal, penetration);
+                obj1.setMovement(M.addVec(obj1.nextSpeed, punish));
+                obj2.setMovement(M.subVec(obj2.nextSpeed, punish));
+                return;
+            }
 
             collisionNormal = M.vecNormalise(collisionNormal);
 
-            if(M.vec1Length(collisionNormal) == 0) return false;
+            obj1.stepBack(collisionNormal, penetration, -1);
+            obj2.stepBack(collisionNormal, penetration, 1);
+
+            if(M.vec1Length(collisionNormal) == 0) {
+                console.log('collision normal = 0, panic!');
+                return false;
+            }
 
             // collision reaction model (mass ignored)
             var relativeVelocity = M.subVec(obj1.nextSpeed, obj2.nextSpeed),
                 Vrn = M.multiVecVec(collisionNormal, relativeVelocity);
 
-            var j = (-(1+restitution) * Vrn); // M.multiVecVec(collisionNormal, collisionNormal);
+            var j = (-(1+restitution) * Vrn),
+                deltaV = M.multiVec(collisionNormal,j);
 
-            obj1.setMovement(M.addVec(obj1.nextSpeed, M.multiVec(collisionNormal,j)));
-            obj2.setMovement(M.subVec(obj1.nextSpeed, M.multiVec(collisionNormal,j)));
-
-            obj1.stepBack();
-            obj2.stepBack();
-        
-
+            obj1.setMovement(M.addVec(obj1.nextSpeed, deltaV));
+            obj2.setMovement(M.subVec(obj2.nextSpeed, deltaV));
     };
 
     // for spheres
     window.detectCollision = function (obj1, obj2) {
-        var dist = M.vecLength([obj1.nextPosition, obj2.nextPosition]),
-            collisionNormal, restitution = 0,
+        /*
+        * a priori
+        * very rare - when a posteriori collision moves sphere right into another causing undetected collision
+         */
+        var collisionNormal = M.subVec(obj1.position, obj2.position),
+            dist = M.vec1Length(collisionNormal), restitution = 0,
             radiusSum = obj1.boundingSphereRadius + obj2.boundingSphereRadius;
 
         if(dist <= radiusSum) {
-            // collision (ignoring mass)
-            collisionNormal = M.subVec(obj1.nextPosition, obj2.nextPosition);
+            col = new Collision(obj1, obj2, collisionNormal, restitution, dist - radiusSum, false);
+            // for further processing
+            return col;
+        }
 
-            col = new Collision(obj1, obj2, collisionNormal, restitution);
+        // a posteriori
+        collisionNormal = M.subVec(obj1.nextPosition, obj2.nextPosition);
+        dist = M.vec1Length(collisionNormal);
+        restitution = 0;
+        radiusSum = obj1.boundingSphereRadius + obj2.boundingSphereRadius;
+
+        if(dist <= radiusSum) {
+            col = new Collision(obj1, obj2, collisionNormal, restitution, dist - radiusSum, true);
             // for further processing
             return col;
         }
@@ -87,7 +116,7 @@
 
         collisionNormal = M.subVec(centre, closestPtWorld);
 
-        col = new Collision(sphere, box, collisionNormal, restitution);
+        col = new Collision(sphere, box, collisionNormal, restitution, dist, true);
         // for further processing
         return col;
     }
