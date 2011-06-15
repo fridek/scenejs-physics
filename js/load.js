@@ -11,7 +11,7 @@ var settings = {
 
     log: false,
 
-    watchedSphere: 2 + 5* 0 + 5*5 * 2
+    watchedSphere: 2 + 5* 0 + 5*5 * 2 // x + height * y + depth*height * z, indexed from 0
 };
 
 $(window).ready(function() {
