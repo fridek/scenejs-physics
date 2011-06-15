@@ -6,7 +6,7 @@ var settings = {
     gravity: [0.0,-1.0,0.0],
     floorLevel: -15,
     floorRestitution: 0.5,
-    frameTime: 0,
+    frameTime: 1000/30,
     simulationTime: 1000/30,
 
     log: false,
