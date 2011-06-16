@@ -39,9 +39,7 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
                 this.nextSpeed = s;
             }
             if(a) {
-                console.log('before', this.acceleration);
                 this.acceleration = M.addVec(a, settings.gravity);
-                console.log('after', this.acceleration);
             }
         },
 
@@ -51,7 +49,7 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             this.position = p;
         },
 
-        _calculateNextPositionMethod: movement.euler_modified,
+        _calculateNextPositionMethod: movement.heun,
 
         calculateNextPosition: function (time) {
             this._calculateNextPositionMethod.apply(this, [time]);

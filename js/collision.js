@@ -10,16 +10,15 @@
 
     var col;
 
-    var Collision = function (obj1, obj2, collisionNormal, restitution, penetration, posteriori) {
+    var Collision = function (obj1, obj2, collisionNormal, restitution, penetration, failsafe) {
             if(settings.log) console.log('collision', obj1, obj2, penetration, collisionNormal);
 
             /*
-            * a priori
             * very rare - when a posteriori collision moves sphere right into another causing undetected collision
             * nextPosition is equal to position and prevPosition then, so we can't step back
             * applying punishment is fast way to deal with such errors
              */
-            if(!posteriori) {
+            if(!failsafe) {
                 var punish = M.multiVec(collisionNormal, penetration);
                 obj1.setMovement(M.addVec(obj1.nextSpeed, punish));
                 obj2.setMovement(M.subVec(obj2.nextSpeed, punish));
@@ -50,7 +49,7 @@
     // for spheres
     window.detectCollision = function (obj1, obj2) {
         /*
-        * a priori
+        * failsafe
         * very rare - when a posteriori collision moves sphere right into another causing undetected collision
          */
         var collisionNormal = M.subVec(obj1.position, obj2.position),

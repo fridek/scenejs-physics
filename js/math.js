@@ -9,7 +9,7 @@
 var M = {
     multiVec: function (v, f) {
         var tmp = [], i;
-        for(i=0;i<v.length;i+=1) {
+        for(i in v) {
             tmp[i] = v[i] * f;
         }
         return tmp;
@@ -25,10 +25,10 @@ var M = {
     },
 
     addVec: function (v1, v2) {
-        if(v1.length != v2.length) throw "Error in addVec: invalid vectors dimensions";
+//        if(v1.length != v2.length) throw "Error in addVec: invalid vectors dimensions";
 
         var tmp = [], i;
-        for(i=0;i<v1.length;i+=1) {
+        for(i in v1) {
             tmp[i] = v1[i] + v2[i];
         }
         return tmp;
@@ -38,7 +38,7 @@ var M = {
         if(v1.length != v2.length) throw "Error in subVec: invalid vectors dimensions";
 
         var tmp = [], i;
-        for(i=0;i<v1.length;i+=1) {
+        for(i in v1) {
             tmp[i] = v1[i] - v2[i];
         }
         return tmp;
