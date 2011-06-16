@@ -10,6 +10,19 @@
 
     var col;
 
+    /**
+     * Collision object
+     *
+     * Handles detected collision on creation
+     * TODO: collision manager
+     *
+     * @param obj1
+     * @param obj2
+     * @param collisionNormal
+     * @param restitution
+     * @param penetration
+     * @param failsafe - if objects do collide BEFORE movement set this flag true
+     */
     var Collision = function (obj1, obj2, collisionNormal, restitution, penetration, failsafe) {
             if(settings.log) console.log('collision', obj1, obj2, penetration, collisionNormal);
 
@@ -17,7 +30,10 @@
             * very rare - when a posteriori collision moves sphere right into another causing undetected collision
             * nextPosition is equal to position and prevPosition then, so we can't step back
             * applying punishment is fast way to deal with such errors
+            *
+            * TODO: improve to make it more realistic
              */
+        
             if(!failsafe) {
                 var punish = M.multiVec(collisionNormal, penetration);
                 obj1.setMovement(M.addVec(obj1.nextSpeed, punish));
@@ -46,7 +62,9 @@
             obj2.setMovement(M.subVec(obj2.nextSpeed, deltaV));
     };
 
-    // for spheres
+    /*
+    * Collision detection for spheres
+    */
     window.detectCollision = function (obj1, obj2) {
         /*
         * failsafe
@@ -76,7 +94,9 @@
         return false;
     };
 
-    // AABB + sphere
+    /*
+    * Collision detection for AABB + sphere
+    */
     window.detectCollisionBoxSphere = function (box, sphere) {
 
         var centre = sphere.position,

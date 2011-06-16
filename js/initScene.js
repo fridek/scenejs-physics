@@ -1,5 +1,8 @@
 /**
- * initScene.js description here
+ * Initial scene
+ *
+ * code from SceneJS examples
+ * defines some materials and anchor to add new objects
  *
  * @author fridek
  * @date 03.06.11

@@ -31,6 +31,13 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             }
         },
 
+        /**
+         * Set speed and acceleration of object
+         *
+         * to leave one of parameters unchanged pass null instead of vector
+         * @param s spped, vector [x,y,z]
+         * @param a acceleration, vector [x,y,z]
+         */
         setMovement: function (s, a) {
             if(this.objectType != "sphere") return; // not suppoerted yet
 
@@ -43,14 +50,25 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             }
         },
 
+        /**
+         * Set position
+         * Works only for spheres
+         * @param p poisiton, vector [x,y,z]
+         */
         setPosition: function (p) {
             if(this.objectType != "sphere") return; // not suppoerted yet
 
             this.position = p;
         },
 
-        _calculateNextPositionMethod: movement.heun,
+        // choose from movement.js
+        _calculateNextPositionMethod: movement.rk4,
 
+        /**
+         * Interface function for calculating next position
+         *
+         * @param time
+         */
         calculateNextPosition: function (time) {
             this._calculateNextPositionMethod.apply(this, [time]);
 
@@ -65,6 +83,10 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             }
         },
 
+        /**
+         * updates position calculated in previous steps
+         * works only for spheres
+         */
         updatePosition: function () {
             if(this.objectType != "sphere") return; // not supported yet
 
@@ -76,6 +98,13 @@ var makeObject = function (type, position, scale, boundingSphereRadius, id) {
             this.speed = this.nextSpeed;
         },
 
+        /**
+         * If collision occurs, moves sphere back to point it were before collision
+         *
+         * @param collisionNormal
+         * @param penetration
+         * @param direction
+         */
         stepBack: function (collisionNormal, penetration, direction) {
             if(this.objectType != "sphere") return; // not supported yet
 

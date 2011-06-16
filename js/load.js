@@ -2,6 +2,9 @@
  * Main loading file
  */
 
+/**
+ * Settings are globally accessible
+ */
 var settings = {
     gravity: [0.0,-1.0,0.0],
     floorLevel: -15,
@@ -25,6 +28,7 @@ $(window).ready(function() {
     var box = makeObject('box', [0.0,-7.0,0.0], [5.0,1.0,3.0], 5.0, 'box');
     SceneJS.createNode(box);
 
+    // define material for watched sphere as green
     SceneJS.withNode(objects[settings.watchedSphere].id)
                         .insert("node", {
                             type: "material",
